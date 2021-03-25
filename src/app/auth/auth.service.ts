@@ -6,6 +6,7 @@ import {catchError, tap} from 'rxjs/operators';
 
 import {AuthResponseData} from './auth-response-data.model';
 import {User} from './user.model';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class AuthService {
 
   signUp(email: string, password: string): Observable<AuthResponseData>{
      return this.http.post<AuthResponseData>(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBv9UdJqFA4me10rpF-cGog_zqRX3-5ClY',
+      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.firebaseAPIKey,
       {
         email,
         password,
@@ -40,7 +41,7 @@ export class AuthService {
   logIn(email: string, password: string): Observable<AuthResponseData> {
     return this.http
       .post<AuthResponseData>(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBv9UdJqFA4me10rpF-cGog_zqRX3-5ClY',
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.firebaseAPIKey,
         {
           email,
           password,
@@ -85,7 +86,7 @@ export class AuthService {
 
   logout(): void {
     this.user.next(null);
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/auth']).then(() => {} );
     localStorage.removeItem('userData');
     if ( this.tokenExpirationTimer){
       clearTimeout( this.tokenExpirationTimer );

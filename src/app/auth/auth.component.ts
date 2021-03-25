@@ -12,8 +12,8 @@ import {Observable, Subscription} from 'rxjs';
 import {AuthService} from './auth.service';
 import {AuthResponseData} from './auth-response-data.model';
 
-import {AlertComponent} from '../../shared/alert/alert.component';
-import {PlaceholderDirective} from '../../shared/placeholder.directive';
+import {AlertComponent} from '../shared/alert/alert.component';
+import {PlaceholderDirective} from '../shared/placeholder.directive';
 
 @Component({
   selector: 'app-auth',
@@ -46,16 +46,17 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(form: NgForm): void {
+    console.log('Login: ' + this.isLogInMode);
     if (!form.valid){
       return;
     }
     let authObs: Observable<AuthResponseData>;
     const email = form.value.email;
     const password = form.value.password;
-    this.isLoading = true;
 
     authObs = this.isLogInMode ? this.authService.logIn(email, password) : this.authService.signUp(email, password);
 
+    this.isLoading = true;
     authObs.subscribe(() => {
       this.isLoading = false;
       this.router.navigate(['/recipes']).then(() => {});
